@@ -1,22 +1,43 @@
 package br.com.orion.skkylEccomerce
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 object ProdutoService {
 
-    fun getProdutos (context: Context): List<Produto>{
-        val produto = mutableListOf<Produto>()
+    val host = "http://luclujan.pythonanywhere.com"
+    val TAG = "SkkylEcomerce"
 
-        for(i in 1 .. 10){
-            val prod = Produto()
-
-            prod.nome = "Camisa $i"
-            prod.foto = "https://i2-oakley.a8e.net.br/gg/camiseta-masc-mod-black-tape-tee_73456350_888896487651.jpg"
-            prod.tamanho = "M"
-            prod.cor = "Azul"
-            produto.add(prod)
+    fun getProdutos (context: Context): List<Produto> {
+        if (AndroidUtils.isInternetDisponivel(context)) {
+            val url = "$host/produtos"
+            val json = HttpHelper.get(url)
+            return parserJson(json)
+        } else {
+            return ArrayList<Produto>()
         }
-        return produto
+    }
+
+    fun save(produto: Produto): Response {
+        val json = HttpHelper.post("$host/produtos", produto.toJson())
+        return parserJson(json)
+    }
+
+    fun delete(produto: Produto): Response {
+        Log.d(TAG, produto.id.toString())
+        val url = "$host/produtos/${produto.id}"
+        val json = HttpHelper.delete(url)
+        Log.d(TAG, json)
+        return parserJson(json)
+    }
+
+    inline fun <reified T> parserJson(json: String): T {
+        val type = object : TypeToken<T>(){}.type
+        return Gson().fromJson<T>(json, type)
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.orion.skkylEccomerce
 
+import com.google.gson.GsonBuilder
 import java.io.Serializable
 
 class Produto: Serializable {
@@ -14,5 +15,8 @@ class Produto: Serializable {
         return "Produto(id=$id, nome='$nome', foto='$foto', cor='$cor', tamanho='$tamanho')"
     }
 
+    fun toJson(): String {
+        return GsonBuilder().create().toJson(this)
+    }
 
 }
