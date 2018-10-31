@@ -13,12 +13,20 @@ object ProdutoService {
     val TAG = "SkkylEcomerce"
 
     fun getProdutos (context: Context): List<Produto> {
+        var produtos = ArrayList<Produto>()
         if (AndroidUtils.isInternetDisponivel(context)) {
             val url = "$host/produtos"
             val json = HttpHelper.get(url)
-            return parserJson(json)
+            produtos =  parserJson(json)
+            for (prod in produtos) {
+                saveOffline(prod)
+            }
+            return produtos
         } else {
-            return ArrayList<Produto>()
+            val dao = DatabaseManager.getProdutoDAO()
+            val disciplinas = dao.findAll()
+            return produtos
+
         }
     }
 
@@ -28,11 +36,33 @@ object ProdutoService {
     }
 
     fun delete(produto: Produto): Response {
-        Log.d(TAG, produto.id.toString())
-        val url = "$host/produtos/${produto.id}"
-        val json = HttpHelper.delete(url)
-        Log.d(TAG, json)
-        return parserJson(json)
+
+        if (AndroidUtils.isInternetDisponivel(SkkylEccomerce.getInstance().applicationContext)) {
+            val url = "$host/produtos/${produto.id}"
+            val json = HttpHelper.delete(url)
+
+            return parserJson(json)
+        } else {
+            val dao = DatabaseManager.getProdutoDAO()
+            dao.delete(produto)
+            return Response(status = "OK", msg = "Dados salvos localmente")
+        }
+
+    }
+    fun saveOffline(produto: Produto) : Boolean {
+        val dao = DatabaseManager.getProdutoDAO()
+
+        if (! existeDisciplina(produto)) {
+            dao.insert(produto)
+        }
+
+        return true
+
+    }
+
+    fun existeDisciplina(produto: Produto): Boolean {
+        val dao = DatabaseManager.getProdutoDAO()
+        return dao.getById(produto.id) != null
     }
 
     inline fun <reified T> parserJson(json: String): T {

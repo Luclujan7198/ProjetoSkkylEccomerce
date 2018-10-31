@@ -52,7 +52,6 @@ class ProdutoActivity : DebugActivity() {
 
 
 
-        //implementar cards mais para frente!!!
         recyclerProduto = findViewById<RecyclerView>(R.id.recyclerProduto)
         recyclerProduto?.layoutManager = LinearLayoutManager(context)
         recyclerProduto?.itemAnimator = DefaultItemAnimator()

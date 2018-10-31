@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import kotlinx.android.synthetic.main.login.*
 
 class MainActivity : DebugActivity() {
+    val campoUsuario = findViewById<EditText>(R.id.campo_usuario)
+    val campoSenha = findViewById<EditText>(R.id.campo_senha)
 
     private val context: Context get() = this
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,15 +26,33 @@ class MainActivity : DebugActivity() {
 
         botaoLogin.setOnClickListener {onClickLogin() }
 
+        var lembrar = Prefs.getBoolean("lembrar")
+        if (lembrar) {
+            var lembrarNome  = Prefs.getString("lembrarNome")
+            var lembrarSenha  = Prefs.getString("lembrarSenha")
+            campoUsuario.setText(lembrarNome)
+            campoSenha.setText(lembrarSenha)
+            checkBoxLogin.isChecked = lembrar
+
+        }
+
     }
 
     fun onClickLogin(){
-        val campoUsuario = findViewById<EditText>(R.id.campo_usuario)
-        val campoSenha = findViewById<EditText>(R.id.campo_senha)
+
         val valorUsuario = campoUsuario.text.toString()
         val valorSenha = campoSenha.text.toString()
 
 //         criar intent
+        Prefs.setBoolean("lembrar", checkBoxLogin.isChecked)
+        if (checkBoxLogin.isChecked) {
+            Prefs.setString("lembrarNome", valorUsuario)
+            Prefs.setString("lembrarSenha", valorSenha)
+        } else{
+            Prefs.setString("lembrarNome", "")
+            Prefs.setString("lembrarSenha", "")
+        }
+
         if(valorUsuario=="aluno" && valorSenha=="impacta" ){
             val intent = Intent(context, TelaInicialActivity::class.java)
             val params = Bundle()
