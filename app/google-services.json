@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "697293201802",
+    "firebase_url": "https://skkyleccomerce.firebaseio.com",
+    "project_id": "skkyleccomerce",
+    "storage_bucket": "skkyleccomerce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697293201802:android:f89446010f8cd629",
+        "android_client_info": {
+          "package_name": "br.com.orion.skkylEccomerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697293201802-8q4d4t8cn5ekqobe7lsqpalcu9gbgif5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI6tnG3FrwTS-B2Pb8JPLJcgSCPR5GZGY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

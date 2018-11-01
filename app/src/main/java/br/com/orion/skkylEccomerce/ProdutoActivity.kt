@@ -103,10 +103,21 @@ class ProdutoActivity : DebugActivity() {
             this.produtos = ProdutoService.getProdutos(context)
             runOnUiThread {
                 recyclerProduto?.adapter = ProdutoAdapter(produtos) {onClickProduto(it)}
+
+                enviaNotificacao(this.produtos.get(0))
             }
         }.start()
 
 
+    }
+
+    fun enviaNotificacao(produto: Produto) {
+        // Intent para abrir tela quando clicar na notificação
+        val intent = Intent(this, ProdutoActivity::class.java)
+        // parâmetros extras
+        intent.putExtra("produto", produto)
+        // Disparar notificação
+        NotificationUtil.create(this, 1, intent, "SkkylEccomerce", "Novo Produto na ${produto.nome}")
     }
 
     private fun taskExcluir() {

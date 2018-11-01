@@ -79,4 +79,28 @@ class MainActivity : DebugActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // abrir a disciplina caso clique na notificação com o aplicativo fechado
+        abrirProduto()
+        // mostrar no log o tokem do firebase
+        Log.d("firebase", "Firebase Token: ${Prefs.getString("FB_TOKEN")}")
+    }
+
+    fun abrirProduto() {
+        // verificar se existe  id da disciplina na intent
+        if (intent.hasExtra("produtoId")) {
+            Thread {
+                var produtoId = intent.getStringExtra("produtoId")?.toLong()!!
+                val produto = ProdutoService.getProduto(this, produtoId)
+                runOnUiThread {
+                    val intentProduto = Intent(this, ProdutoActivity::class.java)
+                    intentProduto.putExtra("produto", produto)
+                    startActivity(intentProduto)
+                }
+            }.start()
+        }
+
+    }
+
 }
