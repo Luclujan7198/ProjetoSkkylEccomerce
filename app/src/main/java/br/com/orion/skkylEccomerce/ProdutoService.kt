@@ -24,10 +24,26 @@ object ProdutoService {
             return produtos
         } else {
             val dao = DatabaseManager.getProdutoDAO()
-            val disciplinas = dao.findAll()
+            val produtos = dao.findAll()
             return produtos
 
         }
+    }
+
+    fun getProduto (context: Context, id: Long): Produto? {
+
+        if (AndroidUtils.isInternetDisponivel(context)) {
+            val url = "$host/produtos/${id}"
+            val json = HttpHelper.get(url)
+            val disciplina = parserJson<Produto>(json)
+
+            return disciplina
+        } else {
+            val dao = DatabaseManager.getProdutoDAO()
+            val produto = dao.getById(id)
+            return produto
+        }
+
     }
 
     fun save(produto: Produto): Response {

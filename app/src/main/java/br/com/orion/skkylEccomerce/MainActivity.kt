@@ -1,14 +1,17 @@
 package br.com.orion.skkylEccomerce
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.login.*
 
 class MainActivity : DebugActivity() {
-    val campoUsuario = findViewById<EditText>(R.id.campo_usuario)
-    val campoSenha = findViewById<EditText>(R.id.campo_senha)
+
 
     private val context: Context get() = this
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,8 @@ class MainActivity : DebugActivity() {
 
         var lembrar = Prefs.getBoolean("lembrar")
         if (lembrar) {
+            val campoUsuario = findViewById<EditText>(R.id.campo_usuario)
+            val campoSenha = findViewById<EditText>(R.id.campo_senha)
             var lembrarNome  = Prefs.getString("lembrarNome")
             var lembrarSenha  = Prefs.getString("lembrarSenha")
             campoUsuario.setText(lembrarNome)
@@ -39,7 +44,8 @@ class MainActivity : DebugActivity() {
     }
 
     fun onClickLogin(){
-
+        val campoUsuario = findViewById<EditText>(R.id.campo_usuario)
+        val campoSenha = findViewById<EditText>(R.id.campo_senha)
         val valorUsuario = campoUsuario.text.toString()
         val valorSenha = campoSenha.text.toString()
 
@@ -72,4 +78,5 @@ class MainActivity : DebugActivity() {
             Toast.makeText(context, "$result", Toast.LENGTH_LONG).show()
         }
     }
+
 }

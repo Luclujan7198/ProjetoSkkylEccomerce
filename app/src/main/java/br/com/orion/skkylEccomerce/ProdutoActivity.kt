@@ -27,11 +27,12 @@ class ProdutoActivity : DebugActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.produtos)
 
-        val args:Bundle? = intent.extras
+
 
 
         produto = intent.getSerializableExtra("produto") as Produto
 
+        val args:Bundle? = intent.extras
 
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
