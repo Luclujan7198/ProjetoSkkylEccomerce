@@ -29,8 +29,8 @@ class ProdutoActivity : DebugActivity() {
 
 
 
-
-        produto = intent.getSerializableExtra("produto") as Produto
+        if (intent.getSerializableExtra("produto") is Produto)
+            produto = intent.getSerializableExtra("produto") as Produto?
 
         val args:Bundle? = intent.extras
 
@@ -41,15 +41,20 @@ class ProdutoActivity : DebugActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
+
         var texto = findViewById<TextView>(R.id.nomeProduto)
-        texto.text = produto?.nome
+        texto?.text = produto?.nome
         var imagem = findViewById<ImageView>(R.id.imagemProduto)
-        Picasso.with(this).load(produto?.foto).fit().into(imagem,
+        if(imagem != null){
+            Picasso.with(this).load(produto?.foto).fit().into(imagem,
                 object: com.squareup.picasso.Callback{
                     override fun onSuccess() {}
 
                     override fun onError() { }
                 })
+        }
+
 
 
 
@@ -61,19 +66,13 @@ class ProdutoActivity : DebugActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // infla o menu com os botões da ActionBar
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_main_produto, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        // id do item clicado
         val id = item?.itemId
-        // verificar qual item foi clicado
-        // remover a disciplina no WS
         if  (id == R.id.action_remover) {
-            // alerta para confirmar a remeção
-            // só remove se houver confirmação positiva
             AlertDialog.Builder(this)
                     .setTitle(R.string.app_name)
                     .setMessage("Deseja excluir o produto")
@@ -85,7 +84,6 @@ class ProdutoActivity : DebugActivity() {
                         dialog, which -> dialog.dismiss()
                     }.create().show()
         }
-        // botão up navigation
         else if (id == android.R.id.home) {
             finish()
         }
@@ -94,7 +92,6 @@ class ProdutoActivity : DebugActivity() {
 
     override fun onResume() {
         super.onResume()
-        // task para recuperar as disciplinas
         taskProdutos()
     }
 
@@ -112,12 +109,9 @@ class ProdutoActivity : DebugActivity() {
     }
 
     fun enviaNotificacao(produto: Produto) {
-        // Intent para abrir tela quando clicar na notificação
         val intent = Intent(this, ProdutoActivity::class.java)
-        // parâmetros extras
         intent.putExtra("produto", produto)
-        // Disparar notificação
-        NotificationUtil.create(this, 1, intent, "SkkylEccomerce", "Novo Produto na ${produto.nome}")
+        NotificationUtil.create(this, 1, intent, "SkkylEccomerce", "Novo Produto:  ${produto.nome}")
     }
 
     private fun taskExcluir() {
@@ -125,14 +119,12 @@ class ProdutoActivity : DebugActivity() {
             Thread {
                 ProdutoService.delete(this.produto as Produto)
                 runOnUiThread {
-                    // após remover, voltar para activity anterior
                     finish()
                 }
             }.start()
         }
     }
 
-    // tratamento do evento de clicar em uma disciplina
     fun onClickProduto(produto: Produto) {
         Toast.makeText(context, "Clicou no produto ${produto.nome}", Toast.LENGTH_SHORT).show()
         val intent = Intent(context, ProdutoActivity::class.java)
@@ -140,10 +132,8 @@ class ProdutoActivity : DebugActivity() {
         startActivityForResult(intent, REQUEST_REMOVE)
     }
 
-    // esperar o retorno do cadastro da disciplina
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CADASTRO || requestCode == REQUEST_REMOVE ) {
-            // atualizar lista de disciplinas
             taskProdutos()
         }
     }

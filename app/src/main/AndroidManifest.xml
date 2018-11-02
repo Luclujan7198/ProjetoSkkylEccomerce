@@ -22,9 +22,13 @@
             </intent-filter>
         </activity>
         <activity android:name="br.com.orion.skkylEccomerce.DebugActivity" />
+        <activity android:name="br.com.orion.skkylEccomerce.ProdutoCadastroActivity"
+            android:theme="@style/AppTheme.Toolbar"/>
         <activity android:name="br.com.orion.skkylEccomerce.TelaInicialActivity"
             android:theme="@style/AppTheme.Toolbar"></activity>
-        <activity android:name="br.com.orion.skkylEccomerce.ProdutoActivity" />
+        <activity android:name="br.com.orion.skkylEccomerce.ProdutoActivity"
+            android:theme="@style/AppTheme.Toolbar"
+            android:parentActivityName=".TelaInicialActivity"/>
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
