@@ -63,6 +63,8 @@ class ProdutoActivity : DebugActivity() {
         recyclerProduto?.itemAnimator = DefaultItemAnimator()
         recyclerProduto?.setHasFixedSize(true)
 
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,6 +89,9 @@ class ProdutoActivity : DebugActivity() {
         else if (id == android.R.id.home) {
             finish()
         }
+        else if (id == R.id.action_adicionar) {
+            onClickProdutoAdicionar()
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -100,6 +105,18 @@ class ProdutoActivity : DebugActivity() {
             this.produtos = ProdutoService.getProdutos(context)
             runOnUiThread {
                 recyclerProduto?.adapter = ProdutoAdapter(produtos) {onClickProduto(it)}
+
+                enviaNotificacao(this.produtos.get(0))
+            }
+        }.start()
+
+
+    }
+    fun taskAdicionar() {
+        Thread {
+            this.produtos = ProdutoService.getProdutos(context)
+            runOnUiThread {
+                recyclerProduto?.adapter = ProdutoAdapter(produtos) {onClickProdutoAdicionar()}
 
                 enviaNotificacao(this.produtos.get(0))
             }
@@ -130,6 +147,13 @@ class ProdutoActivity : DebugActivity() {
         val intent = Intent(context, ProdutoActivity::class.java)
         intent.putExtra("produto", produto)
         startActivityForResult(intent, REQUEST_REMOVE)
+    }
+
+    fun onClickProdutoAdicionar() {
+        val intent = Intent(context, ProdutoCadastroActivity::class.java)
+//        intent.putExtra("produto", produto)
+        startActivity(intent)
+//        startActivityForResult(intent, REQUEST_CADASTRO)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
